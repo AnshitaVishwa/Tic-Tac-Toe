@@ -62,6 +62,14 @@ public:
             (board[0][2] == board[1][1] and board[1][1] == board[2][0] and board[1][1] != 'v')) gameOver = true;
             return gameOver;
     }
+    bool drawCheck() {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (board[i][j] == 'v') return false;
+            }
+        }
+        return true;
+    }
 };
 
 int main() {
@@ -76,6 +84,10 @@ int main() {
             } else {
                 cout << "Player 1 Wins the Game.";
             }
+            break;
+        }
+        if (t1.drawCheck()) {
+            cout << "The Game Ends In A Draw";
             break;
         }
     }
