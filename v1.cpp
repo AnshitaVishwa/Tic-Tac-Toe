@@ -14,6 +14,9 @@ public:
             }
         }
     }
+    void changingTurn () {
+        isPlayerOne = !isPlayerOne;
+    }
     bool playerOne () {
         return isPlayerOne;
     }
@@ -45,10 +48,8 @@ public:
     void boardMark () {
         if (isPlayerOne) {
             board[cellRow][cellCol] = 'X';
-            isPlayerOne = false;
         } else {
             board[cellRow][cellCol] = 'O';
-            isPlayerOne = true;
         }
     }
     bool gameOverCheck () {
@@ -80,9 +81,9 @@ int main() {
         t1.displayBoard();
         if (t1.gameOverCheck()) {
             if (t1.playerOne()) {
-                cout << "Player 2 Wins the Game.";
-            } else {
                 cout << "Player 1 Wins the Game.";
+            } else {
+                cout << "Player 2 Wins the Game.";
             }
             break;
         }
@@ -90,6 +91,7 @@ int main() {
             cout << "The Game Ends In A Draw";
             break;
         }
+        t1.changingTurn();
     }
     return 0;
 }
