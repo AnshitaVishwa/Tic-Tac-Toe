@@ -47,7 +47,7 @@ public:
             board[cellRow][cellCol] = 'X';
             isPlayerOne = false;
         } else {
-            board[cellRow][cellCol] = 'o';
+            board[cellRow][cellCol] = 'O';
             isPlayerOne = true;
         }
     }
