@@ -4,7 +4,7 @@ using namespace std;
 class Tic_Tac_toe {
 private:
     char board[3][3];
-    bool isPlayerOne = true, gameOver = false;
+    bool isPlayerOne = true;
     int  cellRow, cellCol;
 public:
     Tic_Tac_toe () {
@@ -52,17 +52,6 @@ public:
             board[cellRow][cellCol] = 'O';
         }
     }
-    bool gameOverCheck () {
-        if ((board[0][0] == board[0][1] and board[0][1] == board[0][2] and board[0][1] != 'v') or  
-            (board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[1][1] != 'v') or
-            (board[0][0] == board[1][0] and board[1][0] == board[2][0] and board[1][0] != 'v') or
-            (board[1][0] == board[1][1] and board[1][1] == board[1][2] and board[1][1] != 'v') or
-            (board[0][1] == board[1][1] and board[1][1] == board[2][1] and board[1][1] != 'v') or
-            (board[2][0] == board[2][1] and board[2][1] == board[2][2] and board[2][1] != 'v') or
-            (board[0][2] == board[1][2] and board[1][2] == board[2][2] and board[1][2] != 'v') or
-            (board[0][2] == board[1][1] and board[1][1] == board[2][0] and board[1][1] != 'v')) gameOver = true;
-            return gameOver;
-    }
     bool drawCheck() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -71,27 +60,42 @@ public:
         }
         return true;
     }
+    int evaluate () {
+        if ((board[0][0] == board[0][1] and board[0][1] == board[0][2] and board[0][1] != 'v') or  
+            (board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[1][1] != 'v') or
+            (board[0][0] == board[1][0] and board[1][0] == board[2][0] and board[1][0] != 'v') or
+            (board[1][0] == board[1][1] and board[1][1] == board[1][2] and board[1][1] != 'v') or
+            (board[0][1] == board[1][1] and board[1][1] == board[2][1] and board[1][1] != 'v') or
+            (board[2][0] == board[2][1] and board[2][1] == board[2][2] and board[2][1] != 'v') or
+            (board[0][2] == board[1][2] and board[1][2] == board[2][2] and board[1][2] != 'v') or
+            (board[0][2] == board[1][1] and board[1][1] == board[2][0] and board[1][1] != 'v')) {
+                if (isPlayerOne) return 1;
+                else return -1;
+            }
+            return 0;
+    }
+
 };
 
 int main() {
-    Tic_Tac_toe t1;
-    while (1) {
-        t1.getInput();
-        t1.boardMark();
-        t1.displayBoard();
-        if (t1.gameOverCheck()) {
-            if (t1.playerOne()) {
-                cout << "Player 1 Wins the Game.\n";
-            } else {
-                cout << "Player 2 Wins the Game.\n";
-            }
-            break;
-        }
-        if (t1.drawCheck()) {
-            cout << "The Game Ends In A Draw\n";
-            break;
-        }
-        t1.changingTurn();
-    }
+    // Tic_Tac_toe t1;
+    // while (1) {
+    //     t1.getInput();
+    //     t1.boardMark();
+    //     t1.displayBoard();
+    //     if (t1.gameOverCheck()) {
+    //         if (t1.playerOne()) {
+    //             cout << "Player 1 Wins the Game.\n";
+    //         } else {
+    //             cout << "Player 2 Wins the Game.\n";
+    //         }
+    //         break;
+    //     }
+    //     if (t1.drawCheck()) {
+    //         cout << "The Game Ends In A Draw\n";
+    //         break;
+    //     }
+    //     t1.changingTurn();
+    // }
     return 0;
 }
