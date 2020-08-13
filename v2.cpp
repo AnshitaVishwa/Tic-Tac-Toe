@@ -35,22 +35,14 @@ public:
         }
     }
     int getInput () {
-        if (isPlayerOne) {
-            cout << "Player 1: Select a Cell: [row column]";
-        } else {
-            cout << "Player 2: Select a Cell: [row column]";
-        }
+        cout << "Player 1: Select a Cell: [row column]";
         cin >> cellRow >> cellCol;
         if (board[cellRow][cellCol] != 'v') {
             getInput();
         } 
     }
     void boardMark () {
-        if (isPlayerOne) {
-            board[cellRow][cellCol] = 'X';
-        } else {
-            board[cellRow][cellCol] = 'O';
-        }
+        board[cellRow][cellCol] = 'X';
     }
     bool drawCheck() {
         for (int i = 0; i < 3; ++i) {
@@ -60,6 +52,7 @@ public:
         }
         return true;
     }
+    // evaluation function for who wins the game
     int evaluate () {
         if ((board[0][0] == board[0][1] and board[0][1] == board[0][2] and board[0][1] != 'v') or  
             (board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[1][1] != 'v') or
@@ -74,28 +67,95 @@ public:
             }
             return 0;
     }
-
+    int minimax (int depth, bool PlayerOneTurn) {
+        int score = evaluate();
+        if (score == 1 or score == -1) return score;
+        if (drawCheck()) return 0;
+        if (PlayerOneTurn) {
+            int bestMove = INT_MIN;
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    if (board[i][j] == 'v') {
+                        board[i][j] = 'X';
+                        bestMove = max(bestMove, minimax(depth + 1, !PlayerOneTurn));
+                        board[i][j] = 'v';
+                    }
+                }
+            }
+            return bestMove;
+        } else {
+            int bestMove = INT_MAX;
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    if (board[i][j] == 'v') {
+                        board[i][j] = 'O';
+                        bestMove = min(bestMove, minimax(depth + 1, !PlayerOneTurn));
+                        board[i][j] = 'v';
+                    }
+                }
+            }
+            return bestMove;
+        }
+    }
+    // optimal move chosen by AI
+    void findBestMove () {
+        int r, c;
+        bool found = false;
+        vector<pair<int, int>> one, zero;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (board[i][j] == 'v') {
+                    board[i][j] = 'O';
+                    int valueByAI = minimax(0, true);
+                    board[i][j] = 'v';
+                    if (valueByAI == -1) {
+                        board[i][j] = 'O';
+                        found = true;
+                        break;
+                    } else if (valueByAI == 0) {
+                        zero.push_back({i, j});
+                    } else {
+                        one.push_back({i, j});
+                    }
+                }
+            }
+            if (found) break;
+        }
+        if (!found) {
+            if (zero.size()) {
+                pair<int, int> p = zero.back();
+                r = p.first, c = p.second;
+                board[r][c] = 'O';
+            } else {
+                pair<int, int> p = one.back();
+                r = p.first, c = p.second;
+                board[r][c] = 'O';
+            }
+        }
+    }
 };
 
 int main() {
-    // Tic_Tac_toe t1;
-    // while (1) {
-    //     t1.getInput();
-    //     t1.boardMark();
-    //     t1.displayBoard();
-    //     if (t1.gameOverCheck()) {
-    //         if (t1.playerOne()) {
-    //             cout << "Player 1 Wins the Game.\n";
-    //         } else {
-    //             cout << "Player 2 Wins the Game.\n";
-    //         }
-    //         break;
-    //     }
-    //     if (t1.drawCheck()) {
-    //         cout << "The Game Ends In A Draw\n";
-    //         break;
-    //     }
-    //     t1.changingTurn();
-    // }
+    Tic_Tac_toe T;
+    while (1) {
+        if (T.playerOne()) {
+            T.getInput();
+            T.boardMark();
+        } else {
+            T.findBestMove();
+        }
+        T.displayBoard();
+        // if (T.evaluate() == 1 and T.playerOne()) {
+        //     cout << "Player 1 wins the game \n";
+        //     break;
+        // } else if (T.drawCheck()) {
+        //     cout << "The game ends in a draw \n";
+        //     break;
+        // } else if (T.evaluate() == -1 and !T.playerOne()) {
+        //     cout << "computer wins the game \n";
+        //     break;
+        // }
+        T.changingTurn();
+    }
     return 0;
 }
