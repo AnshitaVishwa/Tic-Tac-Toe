@@ -54,16 +54,24 @@ public:
     }
     // evaluation function for who wins the game
     int evaluate () {
-        if ((board[0][0] == board[0][1] and board[0][1] == board[0][2] and board[0][1] != 'v') or  
-            (board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[1][1] != 'v') or
-            (board[0][0] == board[1][0] and board[1][0] == board[2][0] and board[1][0] != 'v') or
-            (board[1][0] == board[1][1] and board[1][1] == board[1][2] and board[1][1] != 'v') or
-            (board[0][1] == board[1][1] and board[1][1] == board[2][1] and board[1][1] != 'v') or
-            (board[2][0] == board[2][1] and board[2][1] == board[2][2] and board[2][1] != 'v') or
-            (board[0][2] == board[1][2] and board[1][2] == board[2][2] and board[1][2] != 'v') or
-            (board[0][2] == board[1][1] and board[1][1] == board[2][0] and board[1][1] != 'v')) {
-                if (isPlayerOne) return 1;
-                else return -1;
+        if ((board[0][0] == board[0][1] and board[0][1] == board[0][2] and board[0][1] == 'X') or  
+            (board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[1][1] == 'X') or
+            (board[0][0] == board[1][0] and board[1][0] == board[2][0] and board[1][0] == 'X') or
+            (board[1][0] == board[1][1] and board[1][1] == board[1][2] and board[1][1] == 'X') or
+            (board[0][1] == board[1][1] and board[1][1] == board[2][1] and board[1][1] == 'X') or
+            (board[2][0] == board[2][1] and board[2][1] == board[2][2] and board[2][1] == 'X') or
+            (board[0][2] == board[1][2] and board[1][2] == board[2][2] and board[1][2] == 'X') or
+            (board[0][2] == board[1][1] and board[1][1] == board[2][0] and board[1][1] == 'X')) {
+               return 1;
+            } else if ((board[0][0] == board[0][1] and board[0][1] == board[0][2] and board[0][1] != 'O') or  
+            (board[0][0] == board[1][1] and board[1][1] == board[2][2] and board[1][1] == 'O') or
+            (board[0][0] == board[1][0] and board[1][0] == board[2][0] and board[1][0] == 'O') or
+            (board[1][0] == board[1][1] and board[1][1] == board[1][2] and board[1][1] == 'O') or
+            (board[0][1] == board[1][1] and board[1][1] == board[2][1] and board[1][1] == 'O') or
+            (board[2][0] == board[2][1] and board[2][1] == board[2][2] and board[2][1] == 'O') or
+            (board[0][2] == board[1][2] and board[1][2] == board[2][2] and board[1][2] == 'O') or
+            (board[0][2] == board[1][1] and board[1][1] == board[2][0] and board[1][1] == 'O')) {
+                return -1;
             }
             return 0;
     }
@@ -78,6 +86,7 @@ public:
                     if (board[i][j] == 'v') {
                         board[i][j] = 'X';
                         bestMove = max(bestMove, minimax(depth + 1, !PlayerOneTurn));
+                        // cout << evaluate() << "\n";
                         board[i][j] = 'v';
                     }
                 }
@@ -90,6 +99,7 @@ public:
                     if (board[i][j] == 'v') {
                         board[i][j] = 'O';
                         bestMove = min(bestMove, minimax(depth + 1, !PlayerOneTurn));
+                        // cout << evaluate() << "\n";
                         board[i][j] = 'v';
                     }
                 }
@@ -107,6 +117,7 @@ public:
                 if (board[i][j] == 'v') {
                     board[i][j] = 'O';
                     int valueByAI = minimax(0, true);
+                    // cout << valueByAI << i << j << "\n";
                     board[i][j] = 'v';
                     if (valueByAI == -1) {
                         board[i][j] = 'O';
@@ -145,16 +156,16 @@ int main() {
             T.findBestMove();
         }
         T.displayBoard();
-        // if (T.evaluate() == 1 and T.playerOne()) {
-        //     cout << "Player 1 wins the game \n";
-        //     break;
-        // } else if (T.drawCheck()) {
-        //     cout << "The game ends in a draw \n";
-        //     break;
-        // } else if (T.evaluate() == -1 and !T.playerOne()) {
-        //     cout << "computer wins the game \n";
-        //     break;
-        // }
+        if (T.evaluate() == 1 and T.playerOne()) {
+            cout << "Player 1 wins the game \n";
+            break;
+        } else if (T.drawCheck()) {
+            cout << "The game ends in a draw \n";
+            break;
+        } else if (T.evaluate() == -1 and !T.playerOne()) {
+            cout << "computer wins the game \n";
+            break;
+        }
         T.changingTurn();
     }
     return 0;
