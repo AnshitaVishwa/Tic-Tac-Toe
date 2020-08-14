@@ -34,7 +34,7 @@ public:
             else cout << "\n";
         }
     }
-    int getInput () {
+    void getInput () {
         cout << "Player 1: Select a Cell: [row column]";
         cin >> cellRow >> cellCol;
         if (board[cellRow][cellCol] != 'v') {
